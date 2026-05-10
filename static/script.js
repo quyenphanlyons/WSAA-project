@@ -3,6 +3,10 @@ const apiUrl = "/books";
 const bookForm = document.getElementById("bookForm");
 const bookTableBody = document.getElementById("bookTableBody");
 
+const submitButton = document.getElementById("submitButton");
+
+let editMode = false;
+let currentBookId = null;
 
 // Load books when page opens
 window.onload = getBooks;
@@ -40,10 +44,17 @@ function displayBooks(books) {
                 <td>${book.status}</td>
 
                 <td>
+
+                    <button class="btn btn-warning btn-sm me-2"
+                        onclick="editBook(${book.id})">
+                        Edit
+                    </button>
+
                     <button class="btn btn-danger btn-sm"
                         onclick="deleteBook(${book.id})">
                         Delete
                     </button>
+
                 </td>
             </tr>
         `;
@@ -71,25 +82,58 @@ bookForm.addEventListener("submit", function(event) {
         notes: document.getElementById("notes").value
     };
 
-    fetch(apiUrl, {
+    // UPDATE MODE
+    if (editMode) {
 
-        method: "POST",
+        fetch(`${apiUrl}/${currentBookId}`, {
 
-        headers: {
-            "Content-Type": "application/json"
-        },
+            method: "PUT",
 
-        body: JSON.stringify(book)
+            headers: {
+                "Content-Type": "application/json"
+            },
 
-    })
-    .then(response => response.json())
-    .then(data => {
+            body: JSON.stringify(book)
 
-        getBooks();
+        })
+        .then(response => response.json())
+        .then(data => {
 
-        bookForm.reset();
-    })
-    .catch(error => console.log(error));
+            getBooks();
+
+            bookForm.reset();
+
+            editMode = false;
+            currentBookId = null;
+
+            submitButton.textContent = "Add Book";
+        })
+        .catch(error => console.log(error));
+    }
+
+    // CREATE MODE
+    else {
+
+        fetch(apiUrl, {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify(book)
+
+        })
+        .then(response => response.json())
+        .then(data => {
+
+            getBooks();
+
+            bookForm.reset();
+        })
+        .catch(error => console.log(error));
+    }
 });
 
 
@@ -105,4 +149,30 @@ function deleteBook(id) {
     })
     .then(() => getBooks())
     .catch(error => console.log(error));
+}
+
+
+// ========================
+// EDIT BOOK
+// ========================
+
+function editBook(id) {
+
+    fetch(`${apiUrl}/${id}`)
+        .then(response => response.json())
+        .then(book => {
+
+            document.getElementById("title").value = book.title;
+            document.getElementById("author").value = book.author;
+            document.getElementById("genre").value = book.genre;
+            document.getElementById("rating").value = book.rating || "";
+            document.getElementById("status").value = book.status;
+            document.getElementById("notes").value = book.notes;
+
+            editMode = true;
+            currentBookId = id;
+
+            submitButton.textContent = "Update Book";
+        })
+        .catch(error => console.log(error));
 }
