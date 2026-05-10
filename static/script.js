@@ -66,7 +66,7 @@ bookForm.addEventListener("submit", function(event) {
         title: document.getElementById("title").value,
         author: document.getElementById("author").value,
         genre: document.getElementById("genre").value,
-        rating: document.getElementById("rating").value,
+        rating: document.getElementById("rating").value || null,
         status: document.getElementById("status").value,
         notes: document.getElementById("notes").value
     };

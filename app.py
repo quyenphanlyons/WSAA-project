@@ -30,7 +30,7 @@ def createBook():
         'title': request.json['title'],
         'author': request.json['author'],
         'genre': request.json.get('genre', ''),
-        'rating': request.json.get('rating', 0),
+        'rating': request.json.get('rating', None),
         'status': request.json.get('status', 'Unread'),
         'notes': request.json.get('notes', '')
     }
@@ -72,7 +72,7 @@ def updateBook(id):
         'title': request.json['title'],
         'author': request.json['author'],
         'genre': request.json.get('genre', ''),
-        'rating': request.json.get('rating', 0),
+        'rating': request.json.get('rating', None),
         'status': request.json.get('status', 'Unread'),
         'notes': request.json.get('notes', '')
     }

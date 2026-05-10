@@ -27,7 +27,7 @@ class BookDAO:
             title TEXT NOT NULL,
             author TEXT NOT NULL,
             genre TEXT,
-            rating INTEGER CHECK(rating >= 1 AND rating <= 5),
+            rating INTEGER CHECK(rating IS NULL OR (rating >= 1 AND rating <= 5)),
             status TEXT,
             notes TEXT
         )
