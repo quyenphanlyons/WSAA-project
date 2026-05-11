@@ -185,6 +185,16 @@ bookForm.addEventListener("submit", function(event) {
 
 function deleteBook(id) {
 
+    // Ask user to confirm deletion
+    const confirmDelete = confirm(
+        "Are you sure you want to delete this book?"
+    );
+
+    // Stop if user clicks Cancel
+    if (!confirmDelete) {
+        return;
+    }
+
     fetch(`${apiUrl}/${id}`, {
 
         method: "DELETE"
