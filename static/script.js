@@ -5,6 +5,10 @@ const bookTableBody = document.getElementById("bookTableBody");
 
 const submitButton = document.getElementById("submitButton");
 
+// Reference to the form title so it can switch
+// between "Add Book" and "Edit Book"
+const formTitle = document.getElementById("formTitle");
+
 let editMode = false;
 let currentBookId = null;
 
@@ -68,6 +72,20 @@ function displayBooks(books) {
 // ADD BOOK
 // ========================
 
+// Reset the form and return the page to normal "Add Book" mode
+function clearForm() {
+
+    bookForm.reset();
+
+    // Exit edit mode
+    editMode = false;
+    currentBookId = null;
+
+    // Restore default labels
+    submitButton.textContent = "Add Book";
+    formTitle.textContent = "Add Book";
+}
+
 bookForm.addEventListener("submit", function(event) {
 
     event.preventDefault();
@@ -101,12 +119,8 @@ bookForm.addEventListener("submit", function(event) {
 
             getBooks();
 
-            bookForm.reset();
+            clearForm();
 
-            editMode = false;
-            currentBookId = null;
-
-            submitButton.textContent = "Add Book";
         })
         .catch(error => console.log(error));
     }
@@ -130,7 +144,7 @@ bookForm.addEventListener("submit", function(event) {
 
             getBooks();
 
-            bookForm.reset();
+            clearForm();
         })
         .catch(error => console.log(error));
     }
@@ -172,7 +186,9 @@ function editBook(id) {
             editMode = true;
             currentBookId = id;
 
+            // Update form labels for edit mode
             submitButton.textContent = "Update Book";
+            formTitle.textContent = "Edit Book";
         })
         .catch(error => console.log(error));
 }
