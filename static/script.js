@@ -9,11 +9,20 @@ const submitButton = document.getElementById("submitButton");
 // between "Add Book" and "Edit Book"
 const formTitle = document.getElementById("formTitle");
 
+// Search input field
+const searchInput = document.getElementById("searchInput");
+
 let editMode = false;
 let currentBookId = null;
 
+// Store all books for filtering
+let allBooks = [];
+
 // Load books when page opens
 window.onload = getBooks;
+
+// Filter books while typing in the search box
+searchInput.addEventListener("keyup", filterBooks);
 
 
 // ========================
@@ -24,10 +33,29 @@ function getBooks() {
 
     fetch(apiUrl)
         .then(response => response.json())
-        .then(data => displayBooks(data))
+        // Store the books for searching/filtering
+        .then(data => {
+            allBooks = data;
+            displayBooks(allBooks);
+        })
         .catch(error => console.log(error));
 }
 
+// ADD SEARCH FUNCTION
+// Filter books by title or author
+function filterBooks() {
+
+    const searchText = searchInput.value.toLowerCase();
+
+    const filteredBooks = allBooks.filter(book =>
+
+        book.title.toLowerCase().includes(searchText) ||
+
+        book.author.toLowerCase().includes(searchText)
+    );
+
+    displayBooks(filteredBooks);
+}
 
 // ========================
 // DISPLAY BOOKS
