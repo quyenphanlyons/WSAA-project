@@ -67,12 +67,17 @@ function displayBooks(books) {
 
     books.forEach(book => {
 
+        // Convert numeric rating into star symbols
+        const stars = book.rating
+            ? "🌟".repeat(book.rating)
+            : "";
+
         const row = `
             <tr>
                 <td>${book.title}</td>
                 <td>${book.author}</td>
                 <td>${book.genre}</td>
-                <td>${book.rating}</td>
+                <td>${stars}</td>
                 <td>${book.status}</td>
 
                 <td>
