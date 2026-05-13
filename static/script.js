@@ -12,6 +12,10 @@ const formTitle = document.getElementById("formTitle");
 // Search input field
 const searchInput = document.getElementById("searchInput");
 
+// Status and rating form fields
+const statusField = document.getElementById("status");
+const ratingField = document.getElementById("rating");
+
 let editMode = false;
 let currentBookId = null;
 
@@ -20,6 +24,21 @@ let allBooks = [];
 
 // Load books when page opens
 window.onload = getBooks;
+
+// Enable rating only when status is "Read"
+function toggleRatingField() {
+    if (statusField.value === "Read") {
+        ratingField.disabled = false;
+    }
+    else {
+        ratingField.disabled = true;
+        // Clear rating if book is not finished
+        ratingField.value = "";
+    }
+}
+
+// Update rating field when status changes
+statusField.addEventListener("change", toggleRatingField);
 
 // Filter books while typing in the search box
 searchInput.addEventListener("keyup", filterBooks);
@@ -224,6 +243,8 @@ function editBook(id) {
             document.getElementById("genre").value = book.genre;
             document.getElementById("rating").value = book.rating || "";
             document.getElementById("status").value = book.status;
+            // Update rating field availability
+            toggleRatingField();
             document.getElementById("notes").value = book.notes;
 
             editMode = true;
